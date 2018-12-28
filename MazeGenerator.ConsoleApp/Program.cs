@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace MazeGenerator.Console
+namespace MazeGenerator.ConsoleApp
 {
-    class Program
+    static class Program
     {
         static void Main(string[] args)
         {
