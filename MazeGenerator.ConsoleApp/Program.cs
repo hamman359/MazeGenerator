@@ -8,7 +8,7 @@ namespace MazeGenerator.ConsoleApp
     {
         static void Main(string[] args)
         {
-            var grid = new Grid(5,5);
+            var grid = new Grid(20,20);
 
             //while (cell.Column != 4)
             //{
@@ -28,13 +28,33 @@ namespace MazeGenerator.ConsoleApp
             //{
             //    Console.WriteLine($"Row: {row.Length}");
             //}
+                       
+            //var cells = grid.IterateEachCell();
 
-            var cells = grid.IterateEachCell();
+            //foreach (var cell in cells)
+            //{
+            //    Console.WriteLine($"Row: {cell.Row}, Col: {cell.Column}, Links: {cell.Links.Count}");
+            //}
 
-            foreach (var cell in cells)
-            {
-                Console.WriteLine($"Row: {cell.Row}, Col: {cell.Column}");
-            }
+            BinaryTree binaryTree = new BinaryTree();
+
+            binaryTree.On(grid);
+
+            //cells = grid.IterateEachCell();
+
+            //foreach (var cell in cells)
+            //{
+            //    Console.WriteLine($"Row: {cell.Row}, Col: {cell.Column}, Links: {cell.Links.Count}");
+            //}
+
+            Console.WriteLine(grid.ToString());
+
+            var grid2 = new Grid(20, 20);
+            
+            binaryTree.On(grid2);
+
+            Console.WriteLine(grid2.ToString());
+
         }
     }
 }

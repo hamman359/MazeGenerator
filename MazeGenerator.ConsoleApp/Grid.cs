@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace MazeGenerator.ConsoleApp
@@ -102,7 +103,7 @@ namespace MazeGenerator.ConsoleApp
 
         public Cell GetRandomCell()
         {
-            Random random = new Random(DateTime.Now.Millisecond);
+            Random random = new Random();
 
             var row = random.Next(Rows);
             var col = random.Next(Columns);
@@ -127,6 +128,45 @@ namespace MazeGenerator.ConsoleApp
                     yield return _grid[row][col];
                 }
             }
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine($"+{String.Concat(Enumerable.Repeat("---+", Columns))}");
+
+            var rows = IterateRows();
+            var body = "   ";
+            var corner = "+";
+
+            foreach (var row in rows)
+            {
+                StringBuilder top = new StringBuilder("|");
+                StringBuilder bottom = new StringBuilder("+");
+                for (int col = 0; col < row.Length; col++)
+                {
+                    Cell cell = row[col];
+                    if (cell == null)
+                    {
+                        cell = new Cell(-1, -1);
+                    }
+
+                    var eastBoundary = cell.IsLinked(cell.East) ? " " : "|";
+
+                    top.Append(body);
+                    top.Append(eastBoundary);
+
+                    var southBoundary = cell.IsLinked(cell.South) ? "   " : "---";
+                    bottom.Append(southBoundary);
+                    bottom.Append(corner);
+                }
+
+                sb.AppendLine(top.ToString());
+                sb.AppendLine(bottom.ToString());
+            }
+
+            return sb.ToString();
         }
     }
 }
