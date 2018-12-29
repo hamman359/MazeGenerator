@@ -36,6 +36,8 @@ namespace MazeGenerator.ConsoleApp
             Console.WriteLine(algorithm);
             Console.WriteLine(grid.ToString());
 
+            grid.ToPng("D:\\Code\\MazeGenerator\\MazeGenerator.ConsoleApp\\Images\\Test.png");
+
         }
     }
 }

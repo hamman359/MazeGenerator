@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 
@@ -168,5 +170,81 @@ namespace MazeGenerator.ConsoleApp
 
             return sb.ToString();
         }
+
+        public void ToPng(string filename)
+        {
+            int cellSize = 20;
+
+            int width = Columns * cellSize;
+            int height = Rows * cellSize;
+
+            using (Bitmap b = new Bitmap(width + cellSize * 2, height + cellSize * 2))
+            {
+                using (Pen myPen = new Pen(Color.Black, 3))
+                {
+                    using (Graphics g = Graphics.FromImage(b))
+                    {
+                        g.Clear(Color.White);
+
+                        foreach (var cell in IterateEachCell())
+                        {
+                            var x1 = (cell.Column * cellSize) + cellSize;
+                            var y1 = (cell.Row * cellSize) + cellSize;
+                            var x2 = ((cell.Column + 1) * cellSize) + cellSize;
+                            var y2 = ((cell.Row + 1) * cellSize) + cellSize;
+
+                            var upperLeft = new Point(x1, y1);
+                            var upperRight = new Point(x2, y1);
+                            var lowerLeft = new Point(x1, y2);
+                            var lowerRight = new Point(x2, y2);
+
+                            if (cell.North == null)
+                            {
+                                g.DrawLine(myPen, upperLeft, upperRight);
+                            }
+
+                            if (cell.West == null)
+                            {
+                                g.DrawLine(myPen, upperLeft, lowerLeft);
+                            }
+
+                            if (!cell.IsLinked(cell.East))
+                            {
+                                g.DrawLine(myPen, upperRight, lowerRight);
+                            }
+
+                            if (!cell.IsLinked(cell.South))
+                            {
+                                g.DrawLine(myPen, lowerLeft, lowerRight);
+                            }
+                        }
+                    }
+
+                    b.Save(filename, ImageFormat.Png);
+                }
+            }
+        }
+
+
+        //private void DrawCell(int xCoordinate, int yCoordinate)
+        //{
+        //    using (Pen myPen = new Pen(Color.Black, 3))
+        //    {
+        //        using (Graphics formGraphics = this.CreateGraphics())
+        //        {
+        //            var upperLeft = new Point(xCoordinate, yCoordinate);
+        //            var upperRight = new Point(xCoordinate + _cellSize, yCoordinate);
+        //            var lowerLeft = new Point(xCoordinate, yCoordinate + _cellSize);
+        //            var lowerRight = new Point(xCoordinate + _cellSize, yCoordinate + _cellSize);
+
+        //            //formGraphics.DrawRectangle(myPen, new Rectangle(xCoordinate, yCoordinate, _cellSize, _cellSize));
+        //            formGraphics.DrawLine(myPen, upperLeft, upperRight);
+        //            formGraphics.DrawLine(myPen, upperLeft, lowerLeft);
+        //            formGraphics.DrawLine(myPen, lowerLeft, lowerRight);
+        //            formGraphics.DrawLine(myPen, lowerRight, upperRight);
+        //        }
+        //    }
+        //}
+
     }
 }
