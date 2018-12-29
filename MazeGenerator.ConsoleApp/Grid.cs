@@ -171,58 +171,57 @@ namespace MazeGenerator.ConsoleApp
             return sb.ToString();
         }
 
-        public void ToPng(string filename)
+        public Bitmap ToPng(int cellSize)
         {
-            int cellSize = 20;
-
             int width = Columns * cellSize;
             int height = Rows * cellSize;
 
-            using (Bitmap b = new Bitmap(width + cellSize * 2, height + cellSize * 2))
+            Bitmap b = new Bitmap(width + cellSize * 2, height + cellSize * 2);
+
+            using (Pen myPen = new Pen(Color.Black, 3))
             {
-                using (Pen myPen = new Pen(Color.Black, 3))
+                using (Graphics g = Graphics.FromImage(b))
                 {
-                    using (Graphics g = Graphics.FromImage(b))
+                    g.Clear(Color.White);
+
+                    foreach (var cell in IterateEachCell())
                     {
-                        g.Clear(Color.White);
+                        var x1 = (cell.Column * cellSize) + cellSize;
+                        var y1 = (cell.Row * cellSize) + cellSize;
+                        var x2 = ((cell.Column + 1) * cellSize) + cellSize;
+                        var y2 = ((cell.Row + 1) * cellSize) + cellSize;
 
-                        foreach (var cell in IterateEachCell())
+                        var upperLeft = new Point(x1, y1);
+                        var upperRight = new Point(x2, y1);
+                        var lowerLeft = new Point(x1, y2);
+                        var lowerRight = new Point(x2, y2);
+
+                        if (cell.North == null)
                         {
-                            var x1 = (cell.Column * cellSize) + cellSize;
-                            var y1 = (cell.Row * cellSize) + cellSize;
-                            var x2 = ((cell.Column + 1) * cellSize) + cellSize;
-                            var y2 = ((cell.Row + 1) * cellSize) + cellSize;
+                            g.DrawLine(myPen, upperLeft, upperRight);
+                        }
 
-                            var upperLeft = new Point(x1, y1);
-                            var upperRight = new Point(x2, y1);
-                            var lowerLeft = new Point(x1, y2);
-                            var lowerRight = new Point(x2, y2);
+                        if (cell.West == null)
+                        {
+                            g.DrawLine(myPen, upperLeft, lowerLeft);
+                        }
 
-                            if (cell.North == null)
-                            {
-                                g.DrawLine(myPen, upperLeft, upperRight);
-                            }
+                        if (!cell.IsLinked(cell.East))
+                        {
+                            g.DrawLine(myPen, upperRight, lowerRight);
+                        }
 
-                            if (cell.West == null)
-                            {
-                                g.DrawLine(myPen, upperLeft, lowerLeft);
-                            }
-
-                            if (!cell.IsLinked(cell.East))
-                            {
-                                g.DrawLine(myPen, upperRight, lowerRight);
-                            }
-
-                            if (!cell.IsLinked(cell.South))
-                            {
-                                g.DrawLine(myPen, lowerLeft, lowerRight);
-                            }
+                        if (!cell.IsLinked(cell.South))
+                        {
+                            g.DrawLine(myPen, lowerLeft, lowerRight);
                         }
                     }
-
-                    b.Save(filename, ImageFormat.Png);
                 }
+
+                //b.Save(filename, ImageFormat.Png);
             }
+
+            return b;
         }
 
 

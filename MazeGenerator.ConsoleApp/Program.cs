@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 
 namespace MazeGenerator.ConsoleApp
@@ -36,8 +38,11 @@ namespace MazeGenerator.ConsoleApp
             Console.WriteLine(algorithm);
             Console.WriteLine(grid.ToString());
 
-            grid.ToPng("D:\\Code\\MazeGenerator\\MazeGenerator.ConsoleApp\\Images\\Test.png");
+            Bitmap png = grid.ToPng(20);
 
+            var folder = "D:\\Code\\MazeGenerator\\MazeGenerator.ConsoleApp\\Images\\";
+
+            png.Save($"{folder}{DateTime.Now.ToFileTimeUtc()}.png", ImageFormat.Png);
         }
     }
 }
