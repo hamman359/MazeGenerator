@@ -5,9 +5,9 @@ using System.Text;
 
 namespace MazeGenerator.ConsoleApp
 {
-    public class BinaryTree
+    public static class BinaryTree
     {
-        public void On(Grid grid)
+        public static void Generate(Grid grid)
         {
             foreach (Cell cell in grid.IterateEachCell())
             {
