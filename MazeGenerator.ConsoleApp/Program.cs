@@ -8,18 +8,33 @@ namespace MazeGenerator.ConsoleApp
     {
         static void Main(string[] args)
         {
-            var grid = new Grid(10,10);
+            if (args[0] == null)
+            {
+                Console.WriteLine($"You must provide at least an algorithm name");
+                return;
+            }
 
-            BinaryTree.Generate(grid);
+            string algorithm = args[0];
+            int rows = args.Length >= 2 ? Convert.ToInt32(args[1]) : 10;
+            int cols = args.Length >= 3 ? Convert.ToInt32(args[2]) : 10;
 
-            Console.WriteLine("Binary Tree");
+            var grid = new Grid(rows,cols);
+
+            switch (algorithm)
+            {
+                case "BinaryTree":
+                    BinaryTree.Generate(grid);
+                    break;
+                case "Sidewinder":
+                    Sidewinder.Generate(grid);
+                    break;
+                default:
+                    Console.WriteLine($"'{algorithm}' not implemented");
+                    return;
+            }
+
+            Console.WriteLine(algorithm);
             Console.WriteLine(grid.ToString());
-
-            var grid2 = new Grid(10, 10);
-
-            Sidewinder.Generate(grid2);
-            Console.WriteLine("Sidewinder");
-            Console.WriteLine(grid2.ToString());
 
         }
     }

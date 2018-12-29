@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MazeGenerator.ConsoleApp": {
+      "commandName": "Project",
+      "commandLineArgs": "Sidewinder 10 20"
+    }
+  }
+}
